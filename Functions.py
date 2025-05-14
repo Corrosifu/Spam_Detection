@@ -4,7 +4,9 @@ import numpy as np
 import re
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
-from sklearn.metrics import classification_report,  accuracy_score, roc_auc_score,roc_curve
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, recall_score, roc_auc_score, roc_curve
+
+
 def wordcloudplot(ham_text,spam_text):
     ham_wordcloud = WordCloud(width=800, height=400, background_color='white').generate(ham_text)
     spam_wordcloud = WordCloud(width=800, height=400, background_color='white').generate(spam_text)
@@ -45,6 +47,7 @@ def train_model(models,X_train,y_train,X_test,y_test):
     
         print(f"Model: {model_name}\n, Accuracy_Score: {accuracy}")
         print(classification_report(y_test, y_pred))
+        print("Confusion Matrix: \n", confusion_matrix(y_test, y_pred)) 
 
 def plot_roc_curve(fpr,tpr,roc_auc):
     plt.figure(figsize=(8, 6))
@@ -66,3 +69,28 @@ def roc_plot(models,X_test, y_test):
         plot_roc_curve(fpr,tpr,roc_auc)
     
         print(f"ROC-AUC Score for {model_name}: {roc_auc:.4f}")
+
+def clean_text(text):
+    text = text.lower()
+    text = re.sub(r'[^a-zA-Z\s]', '', text)  
+    return text.split()
+
+def is_spam(email_text,spam_keywords):
+    email_text = email_text.lower()
+    for keyword in spam_keywords:
+        if re.search(rf"\b{keyword}\b", email_text):
+            return 1  
+    return 0  
+
+def is_spam_heuristic(email_text, spam_keywords):
+    email_text = email_text.lower()
+    words = email_text.split()
+    
+    
+    spam_word_count = sum(1 for word in words if word in spam_keywords)
+    spam_ratio = spam_word_count / len(words) if words else 0
+    
+    # Détection basée sur la structure du message
+    if spam_ratio > 0.2 or len(email_text) < 20 or email_text.isupper():
+        return 1  # Spam
+    return 0  # Non-spam
