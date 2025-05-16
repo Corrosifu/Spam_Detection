@@ -90,7 +90,7 @@ def is_spam_heuristic(email_text, spam_keywords):
     spam_word_count = sum(1 for word in words if word in spam_keywords)
     spam_ratio = spam_word_count / len(words) if words else 0
     
-    # Détection basée sur la structure du message
+
     if spam_ratio > 0.2 or len(email_text) < 20 or email_text.isupper():
-        return 1  # Spam
-    return 0  # Non-spam
+        return 1 
+    return 0  
