@@ -56,8 +56,11 @@ pip install -r requirements.txt
      ### Spam(1) and Ham(0) distribution 
      
      ![3a878c1d-4020-442a-a522-b8f81afcbd12](https://github.com/user-attachments/assets/55d46441-ad9f-4d07-a2de-da0954634be9)
+
+     ### Word Frequency among Spam and Ham
      
     
+    ![7e096731-05af-49c5-9e8d-f3862ec46be9](https://github.com/user-attachments/assets/7c0543c8-efc1-456b-8bb5-c6f617971f32)
 
      
   
