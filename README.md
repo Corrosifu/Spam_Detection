@@ -34,3 +34,14 @@ venv\Scripts\activate # on Windows
 
 pip install -r requirements.txt
 
+
+---
+
+## Usage
+
+- Open and Launch the **Data_clear** and **new_data_clear** files to analyse and preprocess data.
+- Open and Launch the **Filter_model** file to evaluate the classic filter performances.
+- Open and Launch the **ML_model** file to evaluate standard ML methods performances such as Logistic Regression or Random Forest.
+- Open and Launch the **LLM_finetunin** file to evaluate how LLM perform on Spam vs Ham classification Task.
+
+
