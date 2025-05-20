@@ -41,12 +41,26 @@ pip install -r requirements.txt
 
 - Open and Launch the [**Data_clear**](https://github.com/Corrosifu/Spam_Detection/blob/main/Data_clear.ipynb) and [**new_data_clear**](https://github.com/Corrosifu/Spam_Detection/blob/main/new_data_clear.ipynb) files to analyse and preprocess data.
 - Open and Launch the [**Filter_model**](https://github.com/Corrosifu/Spam_Detection/blob/main/Filter_model.ipynb) file to evaluate the classic filter performances.
-- Open and Launch the [**ML_model]**(https://github.com/Corrosifu/Spam_Detection/blob/main/ML_model.ipynb) file to evaluate standard ML methods performances such as Logistic Regression or Random Forest.
+- Open and Launch the [**ML_model**](https://github.com/Corrosifu/Spam_Detection/blob/main/ML_model.ipynb) file to evaluate standard ML methods performances such as Logistic Regression or Random Forest.
 - Open and Launch the [**LLM_finetuning**](https://github.com/Corrosifu/Spam_Detection/blob/main/LLM_finetuning.ipynb) file to evaluate how LLM perform on Spam vs Ham classification Task.
 - The [**Functions**](https://github.com/Corrosifu/Spam_Detection/blob/main/Functions.py) file holds all functions designed to simplify the notebooks code.
   
   ## Data
 
-- Data source: [link or description]
+  1. Data sources:
+    
+     [Kaggle](https://www.kaggle.com/datasets/abdmental01/email-spam-dedection) and [HuggingFace](https://huggingface.co/datasets/zefang-liu/phishing-email-dataset)
+
+  2. Data Analysis (The detail is provided only for Kaggle dataset but will be updated soon):
+ 
+     ###Spam(1) and Ham(0) distribution 
+     
+     ![3a878c1d-4020-442a-a522-b8f81afcbd12](https://github.com/user-attachments/assets/55d46441-ad9f-4d07-a2de-da0954634be9)
+     
+    
+
+     
+  
+  
 
 
