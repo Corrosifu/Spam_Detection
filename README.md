@@ -46,14 +46,14 @@ pip install -r requirements.txt
 - The [**Functions**](https://github.com/Corrosifu/Spam_Detection/blob/main/Functions.py) file holds all functions designed to simplify the notebooks code.
   
   ## Data
-
+  
   1. Data sources:
     
      [Kaggle](https://www.kaggle.com/datasets/abdmental01/email-spam-dedection) and [HuggingFace](https://huggingface.co/datasets/zefang-liu/phishing-email-dataset)
 
   2. Data Analysis (The detail is provided only for Kaggle dataset but will be updated soon):
  
-     ###Spam(1) and Ham(0) distribution 
+     ### Spam(1) and Ham(0) distribution 
      
      ![3a878c1d-4020-442a-a522-b8f81afcbd12](https://github.com/user-attachments/assets/55d46441-ad9f-4d07-a2de-da0954634be9)
      
