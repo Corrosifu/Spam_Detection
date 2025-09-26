@@ -45,31 +45,109 @@ If you want to work on CEAS data
 - Open and Launch the [**LLM_finetuning**](https://github.com/Corrosifu/Spam_Detection/blob/main/CEAS-08/LLM_finetuning_body.ipynb) and [**LLM_finetuning_all_features**](https://github.com/Corrosifu/Spam_Detection/blob/main/CEAS-08/LLM_finetuning_multiple_features.ipynb) files to evaluate how LLM perform on Spam vs Ham classification Task.
 - The [**Functions**](https://github.com/Corrosifu/Spam_Detection/blob/main/Functions.py) file holds all functions designed to simplify the notebooks code.
   
-If you want to work on kaggle data it is the same usage
+### 1. Test Structuring and Case Studies
 
-  ## Data
-  
-  1. Data sources:
-    
-  [CEAS_08](https://github.com/Corrosifu/Spam_Detection/blob/main/Data/CEAS-08)  [Kaggle](https://www.kaggle.com/datasets/abdmental01/email-spam-dedection) 
+- Analysis of spam classification methods based on text.
+- Experiments on the CEAS-08 dataset.
+- Progression from simple word frequency filtering to advanced LLM fine-tuning.
+- Exploration of the impact of adding complementary data such as email addresses and the number of URLs.
 
-  2. Data Analysis (The detail is provided only for Kaggle dataset but will be updated soon):
- 
-     ### Spam(1) and Ham(0) distribution 
-     
-     ![3a878c1d-4020-442a-a522-b8f81afcbd12](https://github.com/user-attachments/assets/55d46441-ad9f-4d07-a2de-da0954634be9)
+### 2. Datasets and Metric Choices
 
-     ### Word Frequency among Spam and Ham
-     
-    
-    ![7e096731-05af-49c5-9e8d-f3862ec46be9](https://github.com/user-attachments/assets/7c0543c8-efc1-456b-8bb5-c6f617971f32)
+- Utilization of two main datasets: [CEAS_08](https://github.com/Corrosifu/Spam_Detection/blob/main/Data/CEAS-08) (primary) and a simple [Kaggle dataset](https://www.kaggle.com/datasets/abdmental01/email-spam-dedection) (for pre-tests).
+- A 4000-email sample from CEAS-08 balances result quality and computational constraints.
+- Data cleaning and preparation adapted to natural language processing (NLP).
+- Selection of F1-score as the key metric, combining precision and recall.
+- Dataset split: 80% training, 20% testing, according to machine learning standards.
 
+### 3. Data Preprocessing
 
-  ## Results
+- Conversion of textual data into tokens via tokenization.
+- Removal of stopwords and use of a lemmatizer.
+- Application of TF-IDF weighting for word occurrence-based methods.
 
-  ### Filter Methods
+### 4. Method Evaluation
 
-  
+#### Simple and Heuristic Filtering
+
+- Filtering based on the 20 most frequent words: performance near random (F1 ~ 0.56).
+- Filtering using proportions of frequent words, special characters, and mail length: F1 improved to 0.72.
+
+#### Bayesian Filtering
+
+- Multinomial Naive Bayes model with TF-IDF.
+- Superior performance (Accuracy > 93%, F1 ~ 0.93).
+
+#### Conventional Machine Learning Models
+
+| Model               | Accuracy (text only) | F1-Score (text only) | Accuracy (multiple features) | F1-Score (multiple features) |
+|---------------------|---------------------|---------------------|------------------------------|------------------------------|
+| KNN                 | 80.37%              | 0.80                | 75.87%                       | 0.76                         |
+| Logistic Regression  | 98.12%              | 0.98                | 97.37%                       | 0.97                         |
+| Random Forest       | 98.50%              | 0.98                | 99.12%                       | 0.99                         |
+| XGBoost             | 98.12%              | 0.98                | 98.12%                       | 0.98                         |
+
+- Ensemble models (Random Forest, XGBoost) better model non-linearities and large datasets.
+- Logistic regression performs well on small, vectorized data batches.
+
+#### LLM Fine-Tuning
+
+- Use of DistilBERT, an encoder transformer architecture optimized for classification.
+- Wordpiece tokenizer for fine-grained handling of rare words.
+- Results:
+
+| Setup                | Accuracy | Precision | Recall | F1-Score |
+|----------------------|----------|-----------|--------|----------|
+| LLM with 1 feature   | 99.37%   | 0.9956    | 0.9934 | 0.9945   |
+| LLM with multiple features | 99.50%   | 0.9912    | 1.0    | 0.9956   |
+
+- Perfect recall indicates zero false positives on the test set.
+- Computational resource demand and inference time remain higher, limiting usage to contexts prioritizing performance.
+
+### 5. Constraints and Future Directions
+
+- AI serves as a double-edged sword, enhancing both cybersecurity defense and cybercriminal capabilities.
+- Increasing threats from adversarial attacks aim to deceive classification algorithms by subtle content modifications.
+- Mitigation strategies include data augmentation, AI-generated mail scoring, and use of Generative Adversarial Networks (GANs) to reinforce model robustness.
+- Open-source model usage exposes vulnerabilities; proprietary or retrained models could mitigate risks.
+- Regular dataset and model updates are required to prevent concept drift.
+- Hybrid approaches combining automated learning and human expertise appear promising for refined spam detection.
+
+---
+
+## Installation and Prerequisites
+
+- Python environment with machine learning libraries (scikit-learn, transformers, etc.)
+- Access to CEAS-08 and Kaggle datasets.
+- GPU recommended for LLM training.
+
+---
+
+## Usage
+
+1. Data preprocessing: cleaning, tokenization, vectorization (TF-IDF or specific tokenizer).
+2. Model training.
+3. Evaluation on test set.
+4. Comparative analysis of results (accuracy, F1-score, precision, recall).
+
+---
+
+## Authors and Contributions
+
+This study was carried out independently, providing a neutral and impersonal synthesis and analysis of current AI spam detection methods.
+
+---
+
+## Resources and References
+
+- CEAS Spam-filter Challenge 2008
+- Kaggle email spam detection datasets
+- Documentation on Multinomial Naive Bayes, machine learning, and LLMs
+- References on GANs and adversarial attacks in AI
+
+---
+
+For questions or contributions, please use the issue tracker in this repository.
 
      
   
