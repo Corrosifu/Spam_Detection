@@ -7,14 +7,19 @@ The goal of this project is to provide a historical overview of the various meth
 ## Table of Contents
 
 - [Description](#description)
-- [Installation](#installation)
+- [Test Structuring and Case Studies](#1-test-structuring-and-case-studies)
+- [Datasets and Metric Choices](#2-datasets-and-metric-choices)
+- [Data Preprocessing](#3-data-preprocessing)
+- [Method Evaluation](#4-method-evaluation)
+  - [Simple and Heuristic Filtering](#simple-and-heuristic-filtering)
+  - [Bayesian Filtering](#bayesian-filtering)
+  - [Conventional Machine Learning Models](#conventional-machine-learning-models)
+  - [LLM Fine-Tuning](#llm-fine-tuning)
+- [Constraints and Future Directions](#5-constraints-and-future-directions)
+- [Installation and Prerequisites](#installation-and-prerequisites)
 - [Usage](#usage)
-- [Data](#data)
-- [Results](#results)
-- [Features](#features)
-- [Roadmap](#roadmap)
-- [Authors](#authors)
-- [License](#license)
+- [Authors and Contributions](#authors-and-contributions)
+- [Resources and References](#resources-and-references)
 
 ---
 
