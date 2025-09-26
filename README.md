@@ -39,10 +39,10 @@ pip install -r requirements.txt
 
 ## Usage
 
-- Open and Launch the [**Data_clear**](https://github.com/Corrosifu/Spam_Detection/blob/main/Data_clear.ipynb) and [**new_data_clear**](https://github.com/Corrosifu/Spam_Detection/blob/main/new_data_clear.ipynb) files to analyse and preprocess data.
-- Open and Launch the [**Filter_model**](https://github.com/Corrosifu/Spam_Detection/blob/main/Filter_model.ipynb) file to evaluate the classic filter performances.
-- Open and Launch the [**ML_model**](https://github.com/Corrosifu/Spam_Detection/blob/main/ML_model.ipynb) file to evaluate standard ML methods performances such as Logistic Regression or Random Forest.
-- Open and Launch the [**LLM_finetuning**](https://github.com/Corrosifu/Spam_Detection/blob/main/LLM_finetuning.ipynb) file to evaluate how LLM perform on Spam vs Ham classification Task.
+- Open and Launch the [**CEAS_Data_clear**](https://github.com/Corrosifu/Spam_Detection/blob/main/CEAS_08.ipynb)  files to analyse and preprocess data.
+- Open and Launch the [**Filter_model**](https://github.com/Corrosifu/Spam_Detection/blob/main/CEAS_08/Filter_model_CEAS.ipynb) file to evaluate the classic filter performances.
+- Open and Launch the [**ML_model**](https://github.com/Corrosifu/Spam_Detection/blob/main/CEAS_08/ML_model_body.ipynb) and [**ML_model_all_features**](https://github.com/Corrosifu/Spam_Detection/blob/main/CEAS_08/ML_model_multiple_features.ipynb) files to evaluate standard ML methods performances such as Logistic Regression or Random Forest.
+- Open and Launch the [**LLM_finetuning**](https://github.com/Corrosifu/Spam_Detection/blob/main/CEAS_08/LLM_finetuning_body.ipynb) and [**LLM_finetuning_all_features**](https://github.com/Corrosifu/Spam_Detection/blob/main/CEAS_08/LLM_finetuning_multiple_features.ipynb) files to evaluate how LLM perform on Spam vs Ham classification Task.
 - The [**Functions**](https://github.com/Corrosifu/Spam_Detection/blob/main/Functions.py) file holds all functions designed to simplify the notebooks code.
   
   ## Data
