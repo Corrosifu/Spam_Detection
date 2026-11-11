@@ -12,7 +12,6 @@ from email.utils import parsedate_to_datetime
 import spacy
 import pandas as pd
 import json
-from openai import OpenAI
 
 # Fonction pour générer et afficher deux nuages de mots (word clouds)
 # Un pour les messages "ham" (non spam), un pour les messages "spam"
@@ -139,7 +138,11 @@ def spacy_tokenizer(text):
     return [token.lemma_.lower() for token in doc if not token.is_stop and token.is_alpha]
 
 '''
-client = OpenAI(api_key="sk-ijklmnopabcd5678ijklmnopabcd5678ijklmnop")
+# Optional data augmentation (disabled). Needs `pip install openai` and the OPENAI_API_KEY
+# environment variable; never hard-code an API key in the source.
+from openai import OpenAI
+
+client = OpenAI()  # reads OPENAI_API_KEY
 
 def generate_augmented_ham_email(original_email, n_variants: int = 1):
     prompt = f"""
