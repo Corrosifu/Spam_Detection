@@ -1,161 +1,142 @@
-# Spam Detection
+# Spam Detection: from heuristics to fine-tuned transformers
 
-## Description
+A historical and experimental overview of how spam classification has been handled, from
+word-frequency heuristics to a fine-tuned DistilBERT, compared on the same data with the same
+metric.
 
-The goal of this project is to provide a historical overview of the various methods that have been used over time to handle spam classification in emails or messages.
+| Family | Best F1 (CEAS-08 sample) |
+|---|---|
+| Frequency heuristics | 0.72 |
+| Multinomial Naive Bayes (TF-IDF) | ~0.93 |
+| Classical ML (logistic regression, random forest, XGBoost) | 0.98 – 0.99 |
+| DistilBERT fine-tuning | 0.995 – 0.996 |
 
-## Table of Contents
+> Read the [limitations](#limitations-and-caveats) before comparing these numbers: a single
+> 80/20 split on a 4,000-email sample, and a DistilBERT checkpoint that was already tuned on spam.
 
-- [Description](#description)
-- [Test Structuring and Case Studies](#1-test-structuring-and-case-studies)
-- [Datasets and Metric Choices](#2-datasets-and-metric-choices)
-- [Data Preprocessing](#3-data-preprocessing)
-- [Method Evaluation](#4-method-evaluation)
-  - [Simple and Heuristic Filtering](#simple-and-heuristic-filtering)
-  - [Bayesian Filtering](#bayesian-filtering)
-  - [Conventional Machine Learning Models](#conventional-machine-learning-models)
-  - [LLM Fine-Tuning](#llm-fine-tuning)
-- [Constraints and Future Directions](#5-constraints-and-future-directions)
-- [Installation and Prerequisites](#installation-and-prerequisites)
-- [Usage](#usage)
-- [Authors and Contributions](#authors-and-contributions)
-- [Resources and References](#resources-and-references)
+## Table of contents
 
----
+- [Quick start](#quick-start)
+- [Repository layout](#repository-layout)
+- [Experimental setup](#experimental-setup)
+- [Results](#results)
+- [Limitations and caveats](#limitations-and-caveats)
+- [Constraints and future directions](#constraints-and-future-directions)
+- [Data](#data)
+- [Author](#author)
+- [Resources and references](#resources-and-references)
 
-## Installation
+## Quick start
 
-1. Clone the repository:
-
+```bash
+git lfs install                      # the CSV files are stored with Git LFS
 git clone https://github.com/Corrosifu/Spam_Detection.git
-
-2. Create a virtual environment (optional but recommended):
+cd Spam_Detection
 
 python -m venv venv
-source venv/bin/activate # on Linux/Mac
-venv\Scripts\activate # on Windows
-
-3. Install dependencies:
-
+source venv/bin/activate             # Windows: venv\Scripts\activate
 pip install -r requirements.txt
+python -m spacy download en_core_web_sm
+python -m nltk.downloader stopwords wordnet
+```
 
+Open the notebooks from their own folder (they read the data with relative paths such as
+`../Data/new_data_clear.csv`). A GPU is recommended for the fine-tuning notebooks.
 
----
+## Repository layout
 
-## Usage
-If you want to work on CEAS data
-- Open and Launch the [**CEAS_Data_clear**](https://github.com/Corrosifu/Spam_Detection/blob/main/CEAS-08/CEAS_data_clear.ipynb)  files to analyse and preprocess data.
-- Open and Launch the [**Filter_model**](https://github.com/Corrosifu/Spam_Detection/blob/main/CEAS-08/Filter_model_CEAS.ipynb) file to evaluate the classic filter performances.
-- Open and Launch the [**ML_model**](https://github.com/Corrosifu/Spam_Detection/blob/main/CEAS-08/ML_model_body.ipynb) and [**ML_model_all_features**](https://github.com/Corrosifu/Spam_Detection/blob/main/CEAS-08/ML_model_multiple_features.ipynb) files to evaluate standard ML methods performances such as Logistic Regression or Random Forest.
-- Open and Launch the [**LLM_finetuning**](https://github.com/Corrosifu/Spam_Detection/blob/main/CEAS-08/LLM_finetuning_body.ipynb) and [**LLM_finetuning_all_features**](https://github.com/Corrosifu/Spam_Detection/blob/main/CEAS-08/LLM_finetuning_multiple_features.ipynb) files to evaluate how LLM perform on Spam vs Ham classification Task.
-- The [**Functions**](https://github.com/Corrosifu/Spam_Detection/blob/main/Functions.py) file holds all functions designed to simplify the notebooks code.
-  
-### 1. Test Structuring and Case Studies
+| Path | Content |
+|---|---|
+| `CEAS-08/` | Main study. Run in this order: `CEAS_data_clear.ipynb` (cleaning) → `Filter_model_CEAS.ipynb` (heuristic and Bayesian filters) → `ML_model_body.ipynb`, `ML_model_multiple_features.ipynb` (classical ML) → `LLM_finetuning_body.ipynb`, `LLM_finetuning_multiple_features.ipynb` (DistilBERT) |
+| `Kaggle_database/` | Same pipeline on a small Kaggle dataset, used for pre-tests |
+| `*/Functions.py` | Helper functions shared by the notebooks of each folder |
+| `Data/` | Datasets (Git LFS) |
 
-- Analysis of spam classification methods based on text.
-- Experiments on the CEAS-08 dataset.
-- Progression from simple word frequency filtering to advanced LLM fine-tuning.
-- Exploration of the impact of adding complementary data such as email addresses and the number of URLs.
+## Experimental setup
 
-### 2. Datasets and Metric Choices
+- **Datasets:** [CEAS-08](https://github.com/Corrosifu/Spam_Detection/tree/main/Data) (primary) and a
+  [Kaggle dataset](https://www.kaggle.com/datasets/abdmental01/email-spam-dedection) (pre-tests).
+- **Sample:** 4,000 emails from CEAS-08, to balance result quality and compute.
+- **Split:** 80 % training / 20 % test (single split).
+- **Metric:** F1-score, which combines precision and recall; accuracy, precision and recall are also reported.
+- **Preprocessing:** tokenization, stop-word removal, lemmatization, TF-IDF weighting; exact duplicates
+  are dropped during cleaning.
+- **Features:** message text only, or text plus complementary features (sender address, number of URLs).
 
-- Utilization of two main datasets: [CEAS_08](https://github.com/Corrosifu/Spam_Detection/blob/main/Data/CEAS-08) (primary) and a simple [Kaggle dataset](https://www.kaggle.com/datasets/abdmental01/email-spam-dedection) (for pre-tests).
-- A 4000-email sample from CEAS-08 balances result quality and computational constraints.
-- Data cleaning and preparation adapted to natural language processing (NLP).
-- Selection of F1-score as the key metric, combining precision and recall.
-- Dataset split: 80% training, 20% testing, according to machine learning standards.
+## Results
 
-### 3. Data Preprocessing
+### Simple and heuristic filtering
+- Filter on the 20 most frequent words: close to random (F1 ≈ 0.56).
+- Filter on the proportion of frequent words, special characters and message length: F1 = 0.72.
 
-- Conversion of textual data into tokens via tokenization.
-- Removal of stopwords and use of a lemmatizer.
-- Application of TF-IDF weighting for word occurrence-based methods.
+### Bayesian filtering
+- Multinomial Naive Bayes with TF-IDF: accuracy > 93 %, F1 ≈ 0.93.
 
-### 4. Method Evaluation
+### Classical machine learning
 
-#### Simple and Heuristic Filtering
+| Model | Accuracy (text only) | F1 (text only) | Accuracy (multiple features) | F1 (multiple features) |
+|---|---|---|---|---|
+| KNN | 80.37 % | 0.80 | 75.87 % | 0.76 |
+| Logistic regression | 98.12 % | 0.98 | 97.37 % | 0.97 |
+| Random forest | 98.50 % | 0.98 | 99.12 % | 0.99 |
+| XGBoost | 98.12 % | 0.98 | 98.12 % | 0.98 |
 
-- Filtering based on the 20 most frequent words: performance near random (F1 ~ 0.56).
-- Filtering using proportions of frequent words, special characters, and mail length: F1 improved to 0.72.
+Ensemble models (random forest, XGBoost) capture non-linearities better; logistic regression is
+strong on small vectorized data.
 
-#### Bayesian Filtering
+### Transformer fine-tuning (DistilBERT)
 
-- Multinomial Naive Bayes model with TF-IDF.
-- Superior performance (Accuracy > 93%, F1 ~ 0.93).
+| Setup | Accuracy | Precision | Recall | F1 |
+|---|---|---|---|---|
+| Text only | 99.37 % | 0.9956 | 0.9934 | 0.9945 |
+| Multiple features | 99.50 % | 0.9912 | 1.0000 | 0.9956 |
 
-#### Conventional Machine Learning Models
+With multiple features the recall is 1.0: **no spam email was missed** (zero false negatives). The
+precision of 0.9912 means that a few legitimate emails were still flagged as spam (false positives).
 
-| Model               | Accuracy (text only) | F1-Score (text only) | Accuracy (multiple features) | F1-Score (multiple features) |
-|---------------------|---------------------|---------------------|------------------------------|------------------------------|
-| KNN                 | 80.37%              | 0.80                | 75.87%                       | 0.76                         |
-| Logistic Regression  | 98.12%              | 0.98                | 97.37%                       | 0.97                         |
-| Random Forest       | 98.50%              | 0.98                | 99.12%                       | 0.99                         |
-| XGBoost             | 98.12%              | 0.98                | 98.12%                       | 0.98                         |
+The best accuracy comes at a higher cost: training needs a GPU and inference is slower than the
+classical models, which limits its use to contexts where performance matters more than latency.
 
-- Ensemble models (Random Forest, XGBoost) better model non-linearities and large datasets.
-- Logistic regression performs well on small, vectorized data batches.
+## Limitations and caveats
 
-#### LLM Fine-Tuning
+- **Single split, no confidence intervals.** Results come from one 80/20 split of a 4,000-email
+  sample; no cross-validation was run, so differences of a few tenths of a point between the best
+  models are not statistically meaningful.
+- **Pre-tuned checkpoint.** The CEAS DistilBERT notebooks start from
+  `mariagrandury/distilbert-base-uncased-finetuned-sms-spam-collection`, a checkpoint **already
+  fine-tuned on spam data** (SMS Spam Collection). The reported scores therefore do not isolate what
+  fine-tuning from a generic DistilBERT would achieve. The Kaggle notebook starts from `bert-base-uncased`.
+- **Possible overlap between train and test.** Exact duplicates are removed, but near-duplicates and
+  templated emails (same sender or campaign) were not checked, which can inflate the scores of all models.
+- **Dataset age.** CEAS-08 dates from 2008; modern spam (AI-written, targeted) may behave differently.
+- **Environment.** Library versions used for the results were not recorded (`requirements.txt` is unpinned).
+- **Optional helpers.** `Functions.py` contains a disabled data-augmentation helper based on an
+  OpenAI model; it needs your own `OPENAI_API_KEY` and is not used for the reported results. One cell of
+  `CEAS_data_clear.ipynb` loads a Hugging Face model with an access token (placeholder `"Votre Token"`): use your own.
 
-- Use of DistilBERT, an encoder transformer architecture optimized for classification.
-- Wordpiece tokenizer for fine-grained handling of rare words.
-- Results:
+## Constraints and future directions
 
-| Setup                | Accuracy | Precision | Recall | F1-Score |
-|----------------------|----------|-----------|--------|----------|
-| LLM with 1 feature   | 99.37%   | 0.9956    | 0.9934 | 0.9945   |
-| LLM with multiple features | 99.50%   | 0.9912    | 1.0    | 0.9956   |
+- AI is a double-edged sword: it strengthens defence and also the attackers' capabilities.
+- Adversarial attacks try to fool classifiers with subtle content changes. Mitigations include data
+  augmentation, scoring of AI-generated mail, and generative adversarial training.
+- Open-source models expose known weaknesses; proprietary or retrained models can reduce this risk.
+- Datasets and models must be refreshed regularly to limit concept drift.
+- Hybrid approaches combining automated learning and human review look promising.
 
-- Perfect recall indicates zero false positives on the test set.
-- Computational resource demand and inference time remain higher, limiting usage to contexts prioritizing performance.
+## Data
 
-### 5. Constraints and Future Directions
+The CSV files are tracked with Git LFS (`git lfs pull` if the files look like small text pointers).
+They are provided for reproducibility; refer to the original CEAS-08 and Kaggle sources for their
+licences and terms of use.
 
-- AI serves as a double-edged sword, enhancing both cybersecurity defense and cybercriminal capabilities.
-- Increasing threats from adversarial attacks aim to deceive classification algorithms by subtle content modifications.
-- Mitigation strategies include data augmentation, AI-generated mail scoring, and use of Generative Adversarial Networks (GANs) to reinforce model robustness.
-- Open-source model usage exposes vulnerabilities; proprietary or retrained models could mitigate risks.
-- Regular dataset and model updates are required to prevent concept drift.
-- Hybrid approaches combining automated learning and human expertise appear promising for refined spam detection.
+## Author
 
----
+Bilal Bounadja — [GitHub](https://github.com/Corrosifu) · [LinkedIn](https://www.linkedin.com/in/bilal-bounadja-data/).
+Questions or suggestions: please open an issue.
 
-## Installation and Prerequisites
+## Resources and references
 
-- Python environment with machine learning libraries (scikit-learn, transformers, etc.)
-- Access to CEAS-08 and Kaggle datasets.
-- GPU recommended for LLM training.
-
----
-
-## Usage
-
-1. Data preprocessing: cleaning, tokenization, vectorization (TF-IDF or specific tokenizer).
-2. Model training.
-3. Evaluation on test set.
-4. Comparative analysis of results (accuracy, F1-score, precision, recall).
-
----
-
-## Authors and Contributions
-
-This study was carried out independently, providing a neutral and impersonal synthesis and analysis of current AI spam detection methods.
-
----
-
-## Resources and References
-
-- CEAS Spam-filter Challenge 2008
-- Kaggle email spam detection datasets
-- Documentation on Multinomial Naive Bayes, machine learning, and LLMs
+- CEAS 2008 Spam-filter Challenge
+- [Kaggle email spam detection dataset](https://www.kaggle.com/datasets/abdmental01/email-spam-dedection)
+- Documentation on Multinomial Naive Bayes, classical ML models and transformers
 - References on GANs and adversarial attacks in AI
-
----
-
-For questions or contributions, please use the issue tracker in this repository.
-
-     
-  
-  
-
-
