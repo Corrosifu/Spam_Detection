@@ -1,0 +1,19 @@
+# Dependencies inferred from the notebooks' imports (versions not pinned: the versions
+# used for the reported results were not recorded).
+numpy
+pandas
+scipy
+scikit-learn
+xgboost
+nltk
+spacy
+matplotlib
+seaborn
+wordcloud
+# LLM fine-tuning notebooks
+torch
+transformers
+accelerate
+datasets
+# running the notebooks
+jupyter
